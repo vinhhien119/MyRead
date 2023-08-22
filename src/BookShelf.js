@@ -4,7 +4,7 @@ const BookShelf = ({categoriedBoook, onChangeCategory}) => {
       <ol className="books-grid">
         {categoriedBoook.map((b) => {
           return (
-            <li>
+            <li key={b.id}>
               <div className="book">
                 <div className="book-top">
                   <div
@@ -12,7 +12,11 @@ const BookShelf = ({categoriedBoook, onChangeCategory}) => {
                     style={{
                       width: 128,
                       height: 193,
-                      backgroundImage: `url(${b.imageLinks.thumbnail})`,
+                      backgroundImage: `url("${
+                        b.imageLinks !== undefined
+                          ? b.imageLinks.thumbnail
+                          : ""
+                      }")`,
                     }}
                   ></div>
                   <div className="book-shelf-changer">
@@ -20,7 +24,6 @@ const BookShelf = ({categoriedBoook, onChangeCategory}) => {
                       value={b.shelf}
                       onChange={(e) => onChangeCategory(e, b)}
                     >
-                      {console.log(b.shelf)}
                       <option value="none" disabled>
                         Move to...
                       </option>
@@ -34,7 +37,9 @@ const BookShelf = ({categoriedBoook, onChangeCategory}) => {
                   </div>
                 </div>
                 <div className="book-title">{b.title}</div>
-                <div className="book-authors">{b.authors}</div>
+                <div className="book-authors">
+                {(b.authors && b.authors.join(", ")) || (b.authors !== undefined || null || NaN || "" ? b.authors : "Unknown author")}
+                </div>
               </div>
             </li>
           );

@@ -7,7 +7,7 @@ const ListBook = () => {
   useEffect ( ()  => {
     const getBooks = async () => {
       const res = await BookAPI.getAll();
-      // console.log(res);
+      console.log(res);
       getBooksByCate(res);
     }
     
@@ -45,7 +45,7 @@ const ListBook = () => {
       setCurrentlyReadingBook(currentlyReadingBook.concat(b));
     v === "wantToRead" && setWantToRead(wantToRead.concat(b));
     v === "read" && setRead(read.concat(b));
-  };
+  }
 
   return (
     <div className="list-books">
