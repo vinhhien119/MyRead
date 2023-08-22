@@ -21,10 +21,14 @@ const BookShelf = ({categoriedBoook, onChangeCategory}) => {
                   ></div>
                   <div className="book-shelf-changer">
                     <select
-                      value={b.shelf}
+                      value={
+                        b.shelf !== undefined
+                          ? b.shelf
+                          : "none"
+                      }
                       onChange={(e) => onChangeCategory(e, b)}
                     >
-                      <option value="none" disabled>
+                      <option value="nne" disabled>
                         Move to...
                       </option>
                       <option value="currentlyReading">

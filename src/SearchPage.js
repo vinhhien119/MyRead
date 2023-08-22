@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 import BookShelf from "./BookShelf";
@@ -8,11 +8,23 @@ const SearchPage = () => {
 
   const [query, setQuery] = useState("")
 
+  const checkBook = (res,addedBooks) => {
+    addedBooks.forEach(b => {
+      res.forEach (r => {
+        if (b.id === r.id) {
+          r["shelf"] = b.shelf;
+        }
+      })
+    });
+  }
+
   const updateQuery = async (query) => {
     setQuery(query);
-    if (query.length>0) {
+    if (query !== "") {
       try {
         const res = await BooksAPI.search(query, 10);
+        const addedBooks = await BooksAPI.getAll();
+        checkBook(res,addedBooks);
         console.log(res)
         setBooks(res || []);
       } catch (error) {
