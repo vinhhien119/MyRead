@@ -19,6 +19,7 @@ const SearchPage = () => {
   }
 
   const updateQuery = async (query) => {
+    console.log(query);
     setQuery(query);
     if (query !== "") {
       try {
@@ -70,7 +71,7 @@ const SearchPage = () => {
         <div className="bookshelf-books">
           <ol className="books-grid">
             {
-              books.length >=1 && (
+              (books.length >=1) && (query !== "") && (
                 <BookShelf categoriedBoook = {books} onChangeCategory={changeCategory}/>
               )
             }
