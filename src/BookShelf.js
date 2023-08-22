@@ -1,8 +1,8 @@
-const BookShelf = ({books, onChangeCategory}) => {
+const BookShelf = ({categoriedBoook, onChangeCategory}) => {
   return (
     <div className="bookshelf-books">
       <ol className="books-grid">
-        {books.map((b) => {
+        {categoriedBoook.map((b) => {
           return (
             <li>
               <div className="book">
@@ -20,7 +20,7 @@ const BookShelf = ({books, onChangeCategory}) => {
                       value={b.shelf}
                       onChange={(e) => onChangeCategory(e, b)}
                     >
-                      {/* {console.log(b.shelf)} */}
+                      {console.log(b.shelf)}
                       <option value="none" disabled>
                         Move to...
                       </option>

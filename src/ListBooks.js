@@ -1,21 +1,36 @@
-import { useState } from "react";
-import * as BooksApi from "../src/BooksAPI";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import * as BookAPI from "../src/BooksAPI";
 import BookShelf from "./BookShelf";
 
-const ListBook = ({ books, onUpdateAPI }) => {
-  const [currentlyReadingBook, setCurrentlyReadingBook] = useState(
-    books.filter((b) => b.shelf === "currentlyReading")
-  );
+const ListBook = () => {
+  useEffect ( ()  => {
+    const getBooks = async () => {
+      const res = await BookAPI.getAll();
+      // console.log(res);
+      getBooksByCate(res);
+    }
+    
+    getBooks();
+  }, [])
 
-  const [wantToRead, setWantToRead] = useState(
-    books.filter((b) => b.shelf === "wantToRead")
-  );
+  const [currentlyReadingBook, setCurrentlyReadingBook] = useState([]); 
+  const [wantToRead, setWantToRead] = useState([]);
+  const [read, setRead] = useState([]);
 
-  const [read, setRead] = useState(books.filter((b) => b.shelf === "read"));
+
+
+  const getBooksByCate = (books) => {
+    setCurrentlyReadingBook(books.filter((b) => b.shelf === "currentlyReading"))
+    setWantToRead(books.filter((b) => b.shelf === "wantToRead"))
+    setRead(books.filter((b) => b.shelf === "read"))
+  }
+
+
 
   const changeCategory = (e, b) => {
     var v = e.target.value;
-    BooksApi.update(b, v);
+    BookAPI.update(b, v);
     b.shelf === "currentlyReading" &&
       setCurrentlyReadingBook(
         currentlyReadingBook.filter((book) => book.id !== b.id)
@@ -30,12 +45,7 @@ const ListBook = ({ books, onUpdateAPI }) => {
       setCurrentlyReadingBook(currentlyReadingBook.concat(b));
     v === "wantToRead" && setWantToRead(wantToRead.concat(b));
     v === "read" && setRead(read.concat(b));
-    reRenderCategory();
   };
-
-  const reRenderCategory = () => {
-    onUpdateAPI(books);
-  }
 
   return (
     <div className="list-books">
@@ -47,22 +57,22 @@ const ListBook = ({ books, onUpdateAPI }) => {
           <div className="bookshelf">
             <h2 className="bookshelf-title">Currently Reading</h2>
             <BookShelf
-              books={currentlyReadingBook}
+              categoriedBoook={currentlyReadingBook}
               onChangeCategory={changeCategory}
             />
           </div>
           <div className="bookshelf">
             <h2 className="bookshelf-title">Want to Read</h2>
-            <BookShelf books={wantToRead} onChangeCategory={changeCategory} />
+            <BookShelf categoriedBoook={wantToRead} onChangeCategory={changeCategory} />
           </div>
           <div className="bookshelf">
             <h2 className="bookshelf-title">Read</h2>
-            <BookShelf books={read} onChangeCategory={changeCategory} />
+            <BookShelf categoriedBoook={read} onChangeCategory={changeCategory} />
           </div>
         </div>
       </div>
       <div className="open-search">
-        <a onClick={() => {}}>Add a book</a>
+        <Link to={"/search"}>Add a book</Link>
       </div>
     </div>
   );
